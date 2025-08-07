@@ -31,15 +31,16 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 });
 
 function handleNumberInput(input) {
+  // reset function?
+  if (currentState === STATE.RES) {
+    inputArray = [];
+    firstValue = "";
+    secondValue = "";
+    operator = "";
+    haveOperator = false;
+  }
+
   if (haveOperator === false) {
-    /*
-    if current state is STATE.RES
-      inputArray = [];
-      firstValue = "";
-      secondValue = "";
-      operator = "";
-      haveOperator = false;
-    */
     currentState = STATE.NUM1;
     inputArray.push(input);
     firstValue += input;
@@ -51,23 +52,26 @@ function handleNumberInput(input) {
 }
 
 function handleNonNumberInput(input) {
+  // not sure this is correct, it should work with the code below, see note
+  if (currentState === STATE.RES) {
+    secondValue = "";
+    operator = "";
+    haveOperator = false;
+  }
+
   if (haveOperator === false) {
-    /*
-    if current state is STATE.RES
-      inputArray = [];
-      firstValue = "";
-      secondValue = "";
-      operator = "";
-      haveOperator = false;
-    */
-    // inputArray and firstValue need the operation result without "magic"
-    // numbers, but I think operating again might be a mistake
     currentState = STATE.OP;
     operator = input;
     haveOperator = true;
   } else {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
+    /**
+     * going here on second operator click, but that click becomes the first
+     * operator click -- the operation result is firstValue and the operator
+     * clicked becomes the operator -- so, we need to store & display the
+     * operator and now we are waiting for secondValue input
+     */
   }
 }
 
@@ -75,21 +79,30 @@ function operate(a, b, operator) {
   switch (operator) {
     case "+":
       let addResult = add(a, b);
+      storeOperationResults(addResult);
       updateDisplay(addResult);
       return;
     case "-":
       let subtractResult = subtract(a, b);
+      storeOperationResults(subtractResult);
       updateDisplay(subtractResult);
       return;
     case "*":
       let multiplyResult = multiply(a, b);
+      storeOperationResults(multiplyResult);
       updateDisplay(multiplyResult);
       return;
     case "/":
       let divideResult = divide(a, b);
+      storeOperationResults(divideResult);
       updateDisplay(divideResult);
       return;
   }
+}
+
+function storeOperationResults(result) {
+  inputArray = [result];
+  firstValue = result;
 }
 
 function updateDisplay(input) {
