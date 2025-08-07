@@ -1,4 +1,5 @@
 // STATE MANAGEMENT
+
 const STATE = {
   NUM1: "waiting for first number",
   OP: "waiting for operator",
@@ -9,10 +10,10 @@ const STATE = {
 let currentState = STATE.NUM1;
 
 // VARIABLES
+
 const CALC_DISPLAY = document.querySelector(".calculator__display");
 const CALC_BUTTONS = document.querySelector(".calculator__controls");
 
-let inputArray = [];
 let firstValue = "";
 let secondValue = "";
 let operator = "";
@@ -31,9 +32,7 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 });
 
 function handleNumberInput(input) {
-  // reset function?
   if (currentState === STATE.RES) {
-    inputArray = [];
     firstValue = "";
     secondValue = "";
     operator = "";
@@ -42,11 +41,9 @@ function handleNumberInput(input) {
 
   if (haveOperator === false) {
     currentState = STATE.NUM1;
-    inputArray.push(input);
     firstValue += input;
   } else {
     currentState = STATE.NUM2;
-    inputArray.push(input);
     secondValue += input;
   }
 }
@@ -59,6 +56,7 @@ function handleNonNumberInput(input) {
   } else {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
+
     //handle transition to next state
 
     secondValue = "";
@@ -66,12 +64,6 @@ function handleNonNumberInput(input) {
     haveOperator = true;
 
     currentState = STATE.NUM2;
-    /**
-     * going here on second operator click, but that click becomes the first
-     * operator click -- the operation result is firstValue and the operator
-     * clicked becomes the operator -- so, we need to store & display the
-     * operator and now we are waiting for secondValue input
-     */
   }
 }
 
@@ -101,7 +93,6 @@ function operate(a, b, operator) {
 }
 
 function storeOperationResults(result) {
-  inputArray = [result];
   firstValue = result;
 }
 
@@ -128,12 +119,4 @@ multiply = (a, b) => {
 
 divide = (a, b) => {
   return a / b;
-};
-
-getIndexOfOperator = (array) => {
-  array.some((element, index) => {
-    if (isNaN(element)) {
-      return index;
-    }
-  });
 };
