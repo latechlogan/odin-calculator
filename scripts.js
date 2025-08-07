@@ -3,6 +3,7 @@ const STATE = {
   NUM1: "waiting for first number",
   OP: "waiting for operator",
   NUM2: "waiing for second number",
+  RES: "showing result",
 };
 
 let currentState = STATE.NUM1;
@@ -20,7 +21,7 @@ let haveOperator = false;
 // MAIN FUNCTIONS
 
 CALC_BUTTONS.addEventListener("click", (e) => {
-  CALC_DISPLAY.textContent += e.target.value;
+  updateDisplay(e.target.value);
 
   if (!isNaN(e.target.value)) {
     handleNumberInput(e.target.value);
@@ -31,6 +32,14 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 
 function handleNumberInput(input) {
   if (haveOperator === false) {
+    /*
+    if current state is STATE.RES
+      inputArray = [];
+      firstValue = "";
+      secondValue = "";
+      operator = "";
+      haveOperator = false;
+    */
     currentState = STATE.NUM1;
     inputArray.push(input);
     firstValue += input;
@@ -43,12 +52,21 @@ function handleNumberInput(input) {
 
 function handleNonNumberInput(input) {
   if (haveOperator === false) {
+    /*
+    if current state is STATE.RES
+      inputArray = [];
+      firstValue = "";
+      secondValue = "";
+      operator = "";
+      haveOperator = false;
+    */
+    // inputArray and firstValue need the operation result without "magic"
+    // numbers, but I think operating again might be a mistake
     currentState = STATE.OP;
     operator = input;
     haveOperator = true;
   } else {
-    // remove console.log()
-    console.log(operate(+firstValue, +secondValue, operator));
+    currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
   }
 }
@@ -56,17 +74,30 @@ function handleNonNumberInput(input) {
 function operate(a, b, operator) {
   switch (operator) {
     case "+":
-      return add(a, b);
+      let addResult = add(a, b);
+      updateDisplay(addResult);
+      return;
     case "-":
-      return subtract(a, b);
+      let subtractResult = subtract(a, b);
+      updateDisplay(subtractResult);
+      return;
     case "*":
-      return multiply(a, b);
+      let multiplyResult = multiply(a, b);
+      updateDisplay(multiplyResult);
+      return;
     case "/":
-      return divide(a, b);
+      let divideResult = divide(a, b);
+      updateDisplay(divideResult);
+      return;
   }
 }
 
-function updateDisplay() {}
+function updateDisplay(input) {
+  if (currentState === STATE.RES) {
+    CALC_DISPLAY.innerHTML = "";
+  }
+  CALC_DISPLAY.textContent += input;
+}
 
 // HELPERS
 
