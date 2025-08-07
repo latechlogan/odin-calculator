@@ -31,9 +31,11 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 
 function handleNumberInput(input) {
   if (haveOperator === false) {
+    currentState = STATE.NUM1;
     inputArray.push(input);
     firstValue += input;
   } else {
+    currentState = STATE.NUM2;
     inputArray.push(input);
     secondValue += input;
   }
@@ -41,10 +43,13 @@ function handleNumberInput(input) {
 
 function handleNonNumberInput(input) {
   if (haveOperator === false) {
+    currentState = STATE.OP;
     operator = input;
     haveOperator = true;
   } else {
+    // remove console.log()
     console.log(operate(+firstValue, +secondValue, operator));
+    operate(+firstValue, +secondValue, operator);
   }
 }
 
