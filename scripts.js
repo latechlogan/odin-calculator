@@ -1,5 +1,12 @@
-const calculatorDisplay = document.querySelector(".calculator__display");
-const calculatorButtons = document.querySelector(".calculator__controls");
+// STATE
+const STATE = {
+  NUM1: "waiting for first number",
+  OP: "waiting for operator",
+  NUM2: "waiing for second number",
+};
+
+const CALC_DISPLAY = document.querySelector(".calculator__display");
+const CALC_BUTTONS = document.querySelector(".calculator__controls");
 
 let inputArray = [];
 let firstValue = "";
@@ -9,33 +16,32 @@ let haveOperator = false;
 
 // MAIN FUNCTIONS
 
-calculatorButtons.addEventListener("click", (e) => {
-  calculatorDisplay.textContent += e.target.value;
+CALC_BUTTONS.addEventListener("click", (e) => {
+  CALC_DISPLAY.textContent += e.target.value;
 
-  handleNumberInput(e.target.value);
-  handleNonNumberInput(e.target.value);
+  if (!isNaN(e.target.value)) {
+    handleNumberInput(e.target.value);
+  } else {
+    handleNonNumberInput(e.target.value);
+  }
 });
 
 function handleNumberInput(input) {
-  if (!isNaN(input)) {
-    if (haveOperator === false) {
-      inputArray.push(input);
-      firstValue += input;
-    } else {
-      inputArray.push(input);
-      secondValue += input;
-    }
+  if (haveOperator === false) {
+    inputArray.push(input);
+    firstValue += input;
+  } else {
+    inputArray.push(input);
+    secondValue += input;
   }
 }
 
 function handleNonNumberInput(input) {
-  if (isNaN(input)) {
-    if (haveOperator === false) {
-      operator = input;
-      haveOperator = true;
-    } else {
-      console.log(operate(+firstValue, +secondValue, operator));
-    }
+  if (haveOperator === false) {
+    operator = input;
+    haveOperator = true;
+  } else {
+    console.log(operate(+firstValue, +secondValue, operator));
   }
 }
 
@@ -52,23 +58,25 @@ function operate(a, b, operator) {
   }
 }
 
+function updateDisplay() {}
+
 // HELPERS
 
-function add(a, b) {
+add = (a, b) => {
   return a + b;
-}
+};
 
-function subtract(a, b) {
+subtract = (a, b) => {
   return a - b;
-}
+};
 
-function multiply(a, b) {
+multiply = (a, b) => {
   return a * b;
-}
+};
 
-function divide(a, b) {
+divide = (a, b) => {
   return a / b;
-}
+};
 
 getIndexOfOperator = (array) => {
   array.some((element, index) => {
