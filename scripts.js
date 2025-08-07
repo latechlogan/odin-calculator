@@ -21,13 +21,13 @@ let haveOperator = false;
 // MAIN FUNCTIONS
 
 CALC_BUTTONS.addEventListener("click", (e) => {
-  updateDisplay(e.target.value);
-
   if (!isNaN(e.target.value)) {
     handleNumberInput(e.target.value);
   } else {
     handleNonNumberInput(e.target.value);
   }
+
+  updateDisplay(e.target.value);
 });
 
 function handleNumberInput(input) {
@@ -52,13 +52,6 @@ function handleNumberInput(input) {
 }
 
 function handleNonNumberInput(input) {
-  // not sure this is correct, it should work with the code below, see note
-  if (currentState === STATE.RES) {
-    secondValue = "";
-    operator = "";
-    haveOperator = false;
-  }
-
   if (haveOperator === false) {
     currentState = STATE.OP;
     operator = input;
@@ -66,6 +59,13 @@ function handleNonNumberInput(input) {
   } else {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
+    //handle transition to next state
+
+    secondValue = "";
+    operator = input;
+    haveOperator = true;
+
+    currentState = STATE.NUM2;
     /**
      * going here on second operator click, but that click becomes the first
      * operator click -- the operation result is firstValue and the operator
