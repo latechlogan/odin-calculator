@@ -35,33 +35,32 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 });
 
 function handleNumberInput(input) {
-  if (currentState === STATE.RES) {
-    firstValue = "";
-    secondValue = "";
-    operator = "";
-    haveOperator = false;
+  if (currentState === STATE.NUM2 && operator === "=") {
+    clearAll();
   }
 
   if (haveOperator === false) {
     currentState = STATE.NUM1;
     firstValue += input;
 
-    updateDisplay(input);
+    updateDisplay(firstValue);
   } else {
     currentState = STATE.NUM2;
     secondValue += input;
 
-    updateDisplay(input);
+    updateDisplay(secondValue);
   }
 }
 
 function handleNonNumberInput(input) {
   if (haveOperator === false) {
-    currentState = STATE.OP;
-    operator = input;
-    haveOperator = true;
-
-    updateDisplay(input);
+    if (input === "=") {
+      return;
+    } else {
+      currentState = STATE.OP;
+      operator = input;
+      haveOperator = true;
+    }
   } else {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
@@ -71,8 +70,6 @@ function handleNonNumberInput(input) {
     haveOperator = true;
 
     currentState = STATE.NUM2;
-
-    updateDisplay(input);
   }
 }
 
@@ -80,21 +77,25 @@ function operate(a, b, operator) {
   switch (operator) {
     case "+":
       let addResult = add(a, b);
+      addResult = handleDecimalResults(addResult);
       storeOperationResults(addResult);
       updateDisplay(addResult);
       return;
     case "-":
       let subtractResult = subtract(a, b);
+      subtractResult = handleDecimalResults(subtractResult);
       storeOperationResults(subtractResult);
       updateDisplay(subtractResult);
       return;
     case "*":
       let multiplyResult = multiply(a, b);
+      multiplyResult = handleDecimalResults(multiplyResult);
       storeOperationResults(multiplyResult);
       updateDisplay(multiplyResult);
       return;
     case "/":
       let divideResult = divide(a, b);
+      divideResult = handleDecimalResults(divideResult);
       storeOperationResults(divideResult);
       updateDisplay(divideResult);
       return;
@@ -111,7 +112,7 @@ function updateDisplay(input) {
   }
 
   if (input !== "=") {
-    CALC_DISPLAY.textContent += input;
+    CALC_DISPLAY.textContent = input;
   }
 }
 
@@ -142,4 +143,13 @@ multiply = (a, b) => {
 
 divide = (a, b) => {
   return a / b;
+};
+
+handleDecimalResults = (num) => {
+  const numStr = String(num);
+  if (numStr.includes(".")) {
+    return num.toFixed(1); // magic number for decimal places
+  } else {
+    return numStr; // Return as string if no decimal to avoid adding ".00"
+  }
 };
