@@ -22,13 +22,16 @@ let haveOperator = false;
 // MAIN FUNCTIONS
 
 CALC_BUTTONS.addEventListener("click", (e) => {
+  if (e.target.value === "clear") {
+    clearAll();
+    return;
+  }
+
   if (!isNaN(e.target.value)) {
     handleNumberInput(e.target.value);
   } else {
     handleNonNumberInput(e.target.value);
   }
-
-  updateDisplay(e.target.value);
 });
 
 function handleNumberInput(input) {
@@ -42,9 +45,13 @@ function handleNumberInput(input) {
   if (haveOperator === false) {
     currentState = STATE.NUM1;
     firstValue += input;
+
+    updateDisplay(input);
   } else {
     currentState = STATE.NUM2;
     secondValue += input;
+
+    updateDisplay(input);
   }
 }
 
@@ -53,17 +60,19 @@ function handleNonNumberInput(input) {
     currentState = STATE.OP;
     operator = input;
     haveOperator = true;
+
+    updateDisplay(input);
   } else {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
-
-    //handle transition to next state
 
     secondValue = "";
     operator = input;
     haveOperator = true;
 
     currentState = STATE.NUM2;
+
+    updateDisplay(input);
   }
 }
 
@@ -100,7 +109,21 @@ function updateDisplay(input) {
   if (currentState === STATE.RES) {
     CALC_DISPLAY.innerHTML = "";
   }
-  CALC_DISPLAY.textContent += input;
+
+  if (input !== "=") {
+    CALC_DISPLAY.textContent += input;
+  }
+}
+
+function clearAll() {
+  firstValue = "";
+  secondValue = "";
+  operator = "";
+  haveOperator = false;
+
+  currentState = STATE.NUM1;
+
+  CALC_DISPLAY.innerHTML = "";
 }
 
 // HELPERS
