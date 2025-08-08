@@ -110,7 +110,7 @@ html {
 }
 
 .calculator__controls:before {
-  content: "Datamath";
+  content: "Calculator";
   position: absolute;
   top: 1rem;
   right: 0;
