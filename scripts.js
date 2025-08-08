@@ -122,14 +122,6 @@ function storeOperationResults(result) {
 }
 
 function updateDisplay(input) {
-  // if (currentState === STATE.RES) {
-  //   CALC_DISPLAY.innerHTML = "";
-  // }
-
-  // if (input !== "=") {
-  //   CALC_DISPLAY.textContent = input;
-  // }
-
   CALC_DISPLAY.innerHTML = "";
   CALC_DISPLAY.textContent = input;
 }
