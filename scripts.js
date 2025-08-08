@@ -35,6 +35,7 @@ CALC_BUTTONS.addEventListener("click", (e) => {
 });
 
 function handleNumberInput(input) {
+  // clear everything if number input after "equals" input
   if (currentState === STATE.NUM2 && operator === "=") {
     clearAll();
   }
@@ -44,20 +45,28 @@ function handleNumberInput(input) {
     firstValue += input;
 
     updateDisplay(firstValue);
-  } else {
-    if (operator === "/" && input === "0") {
-      updateDisplay("To infinity and beyond!");
-      return;
-    }
-    currentState = STATE.NUM2;
-    secondValue += input;
+  }
 
-    updateDisplay(secondValue);
+  if (haveOperator === true) {
+    // don't let user divide by 0
+    if (operator === "/" && input === "0") {
+      clearAll();
+      let errorMessage = document.createElement("div");
+      errorMessage.setAttribute("style", "font-size: var(--b2)");
+      errorMessage.textContent = "To infinity and beyond!";
+      CALC_DISPLAY.appendChild(errorMessage);
+    } else {
+      currentState = STATE.NUM2;
+      secondValue += input;
+
+      updateDisplay(secondValue);
+    }
   }
 }
 
 function handleNonNumberInput(input) {
-  if (haveOperator === false) {
+  if (firstValue && !secondValue) {
+    // ignore "equals" as the operator
     if (input === "=") {
       return;
     } else {
@@ -65,7 +74,9 @@ function handleNonNumberInput(input) {
       operator = input;
       haveOperator = true;
     }
-  } else {
+  }
+
+  if (haveOperator === true && firstValue && secondValue) {
     currentState = STATE.RES;
     operate(+firstValue, +secondValue, operator);
 
@@ -111,13 +122,16 @@ function storeOperationResults(result) {
 }
 
 function updateDisplay(input) {
-  if (currentState === STATE.RES) {
-    CALC_DISPLAY.innerHTML = "";
-  }
+  // if (currentState === STATE.RES) {
+  //   CALC_DISPLAY.innerHTML = "";
+  // }
 
-  if (input !== "=") {
-    CALC_DISPLAY.textContent = input;
-  }
+  // if (input !== "=") {
+  //   CALC_DISPLAY.textContent = input;
+  // }
+
+  CALC_DISPLAY.innerHTML = "";
+  CALC_DISPLAY.textContent = input;
 }
 
 function clearAll() {
