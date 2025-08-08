@@ -96,6 +96,7 @@ html {
 }
 
 .calculator__controls {
+  position: relative;
   width: 100%;
   height: auto;
   padding: var(--b6) var(--b1) var(--b2) var(--b1);
@@ -106,6 +107,17 @@ html {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: var(--b1);
+}
+
+.calculator__controls:before {
+  content: "Datamath";
+  position: absolute;
+  top: 1rem;
+  right: 0;
+  color: #ddd29d;
+  font-weight: bold;
+  font-size: var(--b2);
+  margin-right: 1rem;
 }
 
 .calc__button {
