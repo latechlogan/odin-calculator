@@ -45,6 +45,10 @@ function handleNumberInput(input) {
 
     updateDisplay(firstValue);
   } else {
+    if (operator === "/" && input === "0") {
+      updateDisplay("To infinity and beyond!");
+      return;
+    }
     currentState = STATE.NUM2;
     secondValue += input;
 
