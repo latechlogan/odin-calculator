@@ -47,7 +47,7 @@ html {
 
 .calculator {
   position: relative;
-  width: 400px;
+  width: 360px;
   height: auto;
   padding: var(--b7) var(--b02) var(--b5) var(--b02);
   margin: auto;
@@ -121,8 +121,13 @@ html {
 }
 
 .calc__button {
-  font-size: 1.25rem;
+  font-size: var(--b2);
   height: 3rem;
+  color: hsl(196, 9%, 23%);
+}
+
+.calc__button:disabled {
+  color: hsla(196, 9%, 23%, 0.32);
 }
 
 .calc__button:active {
@@ -152,4 +157,8 @@ html {
   border-bottom: 5px solid #cd651e;
   border-left: 1px solid #cd651e;
   grid-column: span 2;
+}
+
+.calc__button--big-text {
+  font-size: var(--b3);
 }
